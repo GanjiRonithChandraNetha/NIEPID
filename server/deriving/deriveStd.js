@@ -2,7 +2,10 @@ const findQAs = require('./deriveQAs')
 const studentJsonGenerate = (data,v1)=>{
     const ans = {}
     ans.regNo = data.details.regNo
+    ans.name = data.details.name
     ans.classId = v1
+    ans.currYear=1
+    ans.currTerm="Entry"
     ans.yearReport = [{
         year:1,
         yearComment:"not entered",

@@ -7,25 +7,52 @@ import "react-toastify/dist/ReactToastify.css";
 import image from './th.jpeg';
 
 export default function Home() {
+
+
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const [students, setStudents] = useState({});
-  const teacherName = "John Doe";
+  const [teacher,setTeacher] = useState({})
+  const teacherName = "John Doe"
 
   useEffect(() => {
-    // getDetails();
-    // Using static data for demonstration
-    const groupedStudents = {
-      101: [
-        { id: 1, name: "Student A" },
-        { id: 2, name: "Student B" }
-      ],
-      102: [
-        { id: 3, name: "Student C" },
-        { id: 4, name: "Student D" }
-      ]
-    };
-    setStudents(groupedStudents);
+
+    const teacherId = localStorage.getItem("userId")
+    console.log("hiiii")
+    axios.get('http://localhost:4000/teacher/getStudents', {
+      headers: {
+        id: teacherId,
+        // id:"t2",
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+      }
+    }, { withCredentials: true })
+    .then(res=>{
+      console.log(res)
+      setStudents(res.data.students)
+    })
+
+    localStorage.removeItem("studentId")
+
+    // setStudents(groupedStudents);
+    // console.log(students)
+
+    axios.get('http://localhost:4000/teacher/getTeacher',{
+      headers: {
+        id: teacherId,
+        // id:"t2",
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+      }
+    }, { withCredentials: true })
+    .then((res)=>{
+      console.log(res) 
+      setTeacher(res.data.data)
+    })
+    .catch(err=>{
+      console.log("Error",err)
+    })
+
   }, []);
 
   const logOut = () => {
@@ -63,24 +90,30 @@ export default function Home() {
           <p style={styles.heroSubtitle}>
             Manage your classes and students efficiently.
           </p>
-          <h3 style={styles.teacherInfo}>Welcome, {teacherName}!</h3>
+          <h3 style={styles.teacherInfo}>Welcome, {teacher.teacherName}!</h3>
           {Object.keys(students).length > 0 ? (
             Object.keys(students).map((classId) => (
               <div key={classId} style={styles.classContainer}>
-                <h3>Class {classId}</h3>
+                <h3>{students[classId][0].classId.toUpperCase()}</h3>
                 {students[classId].map((student) => (
                   <div key={student.id} style={styles.student}>
-                    <p>{student.name}</p>
+                    <p>{student.regNo} __ {student.name}</p>
                     <div>
                       <button
                         style={styles.studentButton}
-                        onClick={() => navigate(`eval/`)}
+                        onClick={() => {
+                          localStorage.setItem("studentId", student.regNo)
+                          navigate(`eval/`)
+                        }}
                       >
                         Eval
                       </button>
                       <button
                         style={styles.studentButton}
-                        onClick={() => navigate(`hist/`)}
+                        onClick={() => {
+                          localStorage.setItem("studentId", student.regNo)
+                          navigate(`hist/`)
+                        }}
                       >
                         Hist
                       </button>

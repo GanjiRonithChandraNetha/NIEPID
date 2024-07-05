@@ -39,7 +39,7 @@ function Login() {
         console.log("hjb")
         console.log(response);
         console.log(data.role);
-       
+        localStorage.setItem('userId',data.userId)
         localStorage.setItem("role",data.role);
         localStorage.setItem("token",data.token);
         if(data.role==="admin"){

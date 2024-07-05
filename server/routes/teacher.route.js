@@ -1,9 +1,11 @@
 const express=require('express')
 const routes=express.Router()
-const { historyStudent,evaluateStudent,getStudents } = require('../controllers/teacher.controller')
+const { historyStudent,evaluateStudent,getStudents,getQuestions,getTeacher } = require('../controllers/teacher.controller')
 
 routes.get('/history/:id',historyStudent)
-routes.post('/evaluate/:id',evaluateStudent)
-routes.get('/getStudents/:teacherId',getStudents)
+routes.get('/getStudents',getStudents)
+routes.post('/evaluate/:types',evaluateStudent)
+routes.get('/evaluate/getQuestions',getQuestions)
+routes.get('/getTeacher',getTeacher)
 
 module.exports=routes

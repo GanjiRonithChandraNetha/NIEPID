@@ -6,6 +6,20 @@ const StudentReport = new mongoose.Schema({
         required: true,
         unique: true
     },
+    name:{
+        type:String,
+        required:true
+    },
+    currYear:{//current year added
+        type:String,
+        required:true ,
+        enum:["1","2","3","passedOut"]
+    },
+    currTerm:{//Not required can be exculed
+        type:String,
+        requirde:true,
+        enum:["Entry","I","II","III"]
+    },
     classId: {
         type: String,
         required: true
@@ -13,7 +27,8 @@ const StudentReport = new mongoose.Schema({
     yearReport: [{
         year: {
             type: Number,
-            required: true
+            required: true,
+            enum:["1","2","3"]
         },
         yearComment: {
             type: String,
@@ -22,7 +37,8 @@ const StudentReport = new mongoose.Schema({
         termReport: [{
             term: {
                 type: Number,
-                required: true
+                required: true,
+                enum:["Entry","I","II","III"]
             },
             report: {
                 personalQA: [{

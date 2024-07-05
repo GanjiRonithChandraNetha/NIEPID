@@ -6,8 +6,8 @@ const studentDetailsModel=require('../models/studentDetails.model')
 const classModel=require('../models/class.model')
 const path = require('path')
 
-const generateClassId = require('./deriving/deriveClass')
-const studentJsonGenerate = require('./deriving/deriveStd')
+const generateClassId = require('../deriving/deriveClass')
+const studentJsonGenerate = require('../deriving/deriveStd')
 
 const jwt=require('jsonwebtoken')
 
@@ -53,6 +53,22 @@ const registerStudent=async(req,res)=>{
                 .then(()=>{console.log("student has been saved")})
                 .catch((err)=>{
                     console.log("student has not been saved \n"+err)
+                    flag = true
+                    console.log(ans)
+                })
+                if(flag){
+                    res.status(400).find({reason:"student already exists"})
+                    break lable1
+                }
+                const stdUser = {
+                    id:data.details.regNo,
+                    password:details.regNo,
+                    role:"student"
+                }
+                const responce4 = await new userModel(stdUser).save()
+                .then(()=>{console.log("student has been saved in userDB")})
+                .catch((err)=>{
+                    console.log("student has not been saved in userDB \n"+err)
                     flag = true
                     console.log(ans)
                 })
